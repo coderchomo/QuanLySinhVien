@@ -38,13 +38,36 @@ UPDATE class
 SET ClassID=5
 WHERE ClassID = 1;
 
-SELECT s.StudentName,s2.SubName,m.Mark
+SELECT s.StudentName, s2.SubName, m.Mark
 FROM student s
          join subject s2 on s.Status = s2.Status
          join mark m on s.StudentID = m.StudentID
-order by Mark DESC ;
-SELECT s.StudentName,s2.SubName,m.Mark
+order by Mark DESC;
+SELECT s.StudentName, s2.SubName, m.Mark
 FROM student s
          join subject s2 on s.Status = s2.Status
          join mark m on s.StudentID = m.StudentID
-order by StudentName ASC ;
+order by StudentName ASC;
+
+select Address, count(StudentID) as 'So Luong Hoc Vien'
+from student
+group by Address;
+
+select s.StudentID, s.StudentName, avg(Mark)
+from student s
+         join mark m on s.StudentID = m.StudentID
+group by s.StudentID, s.StudentName
+having avg(Mark) >= ALL (SELECT AVG(Mark) FROM mark GROUP BY mark.StudentID);
+
+select SubName, Credit
+from subject
+having Credit >= all (select Credit from subject);
+
+select SubName, max(Mark)
+from subject
+         join mark m on subject.SubID = m.SubID
+group by SubName having max(Mark)>=all(select max(mark)from mark);
+
+select s.StudentName,s.Address,s.ClassID,avg(Mark)
+from student s
+         join mark m on s.StudentID = m.StudentID group by StudentName order by avg(Mark) desc ;
